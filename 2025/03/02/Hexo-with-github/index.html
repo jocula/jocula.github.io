@@ -14,7 +14,7 @@
 <meta property="og:description" content="简介 GitHub Pages GitHub Pages 是GitHub官方的一项免费静态站点托管服务，我们可以托管和发布自己的静态网站页面。由于有GitHub官方背书，可以认为更稳定可靠。 Hexo Hexo 是一个快速、简单、功能强大的博客框架。你使用 Markdown（或其他标记语言）撰写帖子，Hexo 会在几秒钟内生成具有漂亮主题的静态文件。 Node.js Node.js® 是一个免费、">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-03-03T07:17:58.000Z">
-<meta property="article:modified_time" content="2025-03-03T16:40:02.192Z">
+<meta property="article:modified_time" content="2025-03-04T01:39:19.605Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -207,17 +207,69 @@ git config --global http.<a target="_blank" rel="noopener" href="https://github.
 <p>终于到了本文的主题。这一步遇到了太多的坑，真的想说Node.js的依赖处理很差劲！<br>
 如下内容参考链接：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/60578464%E3%80%82">https://zhuanlan.zhihu.com/p/60578464。</a></p>
 <h2 id="安装Hexo">安装Hexo</h2>
-<p>建议先进行清理操作：<br>
-sudo npm cache clean --force</p>
-<p>使用npm命令安装：<br>
-sudo npm install -g hexo-cli --unsafe-perm<br>
-【重要】这里的“–unsafe-perm”参数可以解决EACESS报错问题。</p>
+<p>建议先进行清理操作：</p>
+<pre><code>sudo npm cache clean --force
+</code></pre>
+<p>使用npm命令安装：</p>
+<pre><code>sudo npm install -g hexo-cli --unsafe-perm
+</code></pre>
+<p>这里如果不添加“–unsafe-perm”参数，则会有如下错误信息：</p>
+<p>/usr/local/bin/hexo -&gt; /usr/local/lib/node_modules/hexo-cli/bin/hexo</p>
+<blockquote>
+<p>hexo-util@3.3.0 postinstall /usr/local/lib/node_modules/hexo-cli/node_modules/hexo-util<br>
+npm run build:highlight</p>
+</blockquote>
+<blockquote>
+<p>hexo-util@3.3.0 build:highlight /usr/local/lib/node_modules/hexo-cli/node_modules/hexo-util<br>
+node scripts/build_highlight_alias.js</p>
+</blockquote>
+<p>events.js:291<br>
+throw er; // Unhandled ‘error’ event<br>
+^</p>
+<p>Error: EACCES: permission denied, open ‘highlight_alias.json’<br>
+Emitted ‘error’ event on WriteStream instance at:<br>
+at internal/fs/streams.js:361:12<br>
+at FSReqCallback.oncomplete (fs.js:156:23) {<br>
+errno: -13,<br>
+code: ‘EACCES’,<br>
+syscall: ‘open’,<br>
+path: ‘highlight_alias.json’<br>
+}<br>
+npm ERR! code ELIFECYCLE<br>
+npm ERR! errno 1<br>
+npm ERR! hexo-util@3.3.0 build:highlight: <code>node scripts/build_highlight_alias.js</code><br>
+npm ERR! Exit status 1<br>
+npm ERR!<br>
+npm ERR! Failed at the hexo-util@3.3.0 build:highlight script.<br>
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.<br>
+npm WARN notsup Unsupported engine for hexo-cli@4.3.2: wanted: {“node”:“&gt;=14”} (current: {“node”:“12.22.12”,“npm”:“6.14.16”})<br>
+npm WARN notsup Not compatible with your version of node/npm: hexo-cli@4.3.2<br>
+npm WARN notsup Unsupported engine for abbrev@2.0.0: wanted: {“node”:“^14.17.0 || ^16.13.0 || &gt;=18.0.0”} (current: {“node”:“12.22.12”,“npm”:“6.14.16”})<br>
+npm WARN notsup Not compatible with your version of node/npm: abbrev@2.0.0<br>
+npm WARN notsup Unsupported engine for hexo-log@4.1.0: wanted: {“node”:“&gt;=14”} (current: {“node”:“12.22.12”,“npm”:“6.14.16”})<br>
+npm WARN notsup Not compatible with your version of node/npm: hexo-log@4.1.0<br>
+npm WARN notsup Unsupported engine for hexo-fs@4.1.3: wanted: {“node”:“&gt;=14”} (current: {“node”:“12.22.12”,“npm”:“6.14.16”})<br>
+npm WARN notsup Not compatible with your version of node/npm: hexo-fs@4.1.3<br>
+npm WARN notsup Unsupported engine for hexo-util@3.3.0: wanted: {“node”:“&gt;=14”} (current: {“node”:“12.22.12”,“npm”:“6.14.16”})<br>
+npm WARN notsup Not compatible with your version of node/npm: hexo-util@3.3.0<br>
+npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@~2.3.2 (node_modules/hexo-cli/node_modules/chokidar/node_modules/fsevents):<br>
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@2.3.3: wanted {“os”:“darwin”,“arch”:“any”} (current: {“os”:“linux”,“arch”:“x64”})</p>
+<p>npm ERR! code ELIFECYCLE<br>
+npm ERR! errno 1<br>
+npm ERR! hexo-util@3.3.0 postinstall: <code>npm run build:highlight</code><br>
+npm ERR! Exit status 1<br>
+npm ERR!<br>
+npm ERR! Failed at the hexo-util@3.3.0 postinstall script.<br>
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.</p>
+<p>npm ERR! A complete log of this run can be found in:<br>
+npm ERR!     &lt;你的家目录&gt;/.npm/_logs/2025-03-03T04_40_21_252Z-debug.log</p>
 <h2 id="初始化Hexo">初始化Hexo</h2>
-<p>依次执行如下命令：<br>
-mkdir &lt;你的blog项目名称&gt;<br>
-cd &lt;你的blog项目名称&gt;<br>
-hexo init<br>
-npm install</p>
+<p>依次执行如下命令：</p>
+<pre><code>mkdir &lt;你的blog项目名称&gt;
+cd &lt;你的blog项目名称&gt;
+hexo init
+npm install
+</code></pre>
 <p>你的项目框架已初始化完成，系统默认带一个Hello World博客页面。</p>
 <h2 id="本地预览Hexo">本地预览Hexo</h2>
 <p>执行如下命令：</p>
